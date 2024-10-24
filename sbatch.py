@@ -35,6 +35,9 @@ class FileGenerator(object):
 
     write_lines = write_list
 
+    def submit_script(self):
+        run(["sbatch", self.filename], check=True)
+
 
 class SbatchGenerator(FileGenerator):
     def __init__(
