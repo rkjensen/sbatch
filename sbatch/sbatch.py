@@ -1,5 +1,4 @@
 from subprocess import run
-
 """
 To quickly generate a sbatch script in an iteractive manner. Made primarily when creating a bunch of different jobs with different parameters
 Use GPU or CPU to initialize the script. Custom parameters for the can be passed through kwargs, and specifc lines can be written with .write_sbatch.
@@ -11,7 +10,6 @@ script.write_sbatch('-e error.txt')
 cmd = ['module load GCC OpenMPI CUDA','source ~/.bashrc','python ~/some/script.py']
 script.write_list(cmd)
 script.submit_script()
-
 """
 
 CPU_QUEUE = "htc-el8"
@@ -245,21 +243,18 @@ class SbatchGenerator3090(SbatchGenerator):
         self.write_sbatch(f'--gres=gpu:3090:1')
         self.write_sbatch(f'--mem-per-gpu=64283')
         self.write_sbatch(f'-p {GPU_QUEUE}')
-        #self.write_sbatch(f'-C rome,gpu=3090')
 
 class SbatchGeneratormaxL40(NewSbatchGenerator):
     def __init__(self, filename: str, time: str = "1-00:00:00", tasks: int = 1, cpu: int = 4, N: int = 1, log: str = None, error: str = None, array=None, mem_per_gpu: int = 48300, **kwargs):
         super().__init__(filename,time,tasks,cpu,N,log,error,array,**kwargs)
         self.write_sbatch(f'--mem-per-gpu={mem_per_gpu}')
         self.write_sbatch(f'-C genoa,gpu=L40s')
-#        self.write_sbatch(f'--gres=shard:1')
         self.write_sbatch(f'-p {GPU_QUEUE}')
         self.write_sbatch(f'-G 1')
 
 class SbatchGeneratorMiniGPU(NewSbatchGenerator):
     def __init__(self, filename: str, time: str = "1-00:00:00", tasks: int = 1, cpu: int = 4, N: int = 1, log: str = None, error: str = None, array=None, mem: int = '20G', **kwargs):
         super().__init__(filename,time,tasks,cpu,N,log,error,array,**kwargs)
-#        self.write_sbatch(f'--gres=shard:1')
         self.write_sbatch(f'-p {GPU_QUEUE}')
         self.write_sbatch(f'-G 1')
         self.write_sbatch(f'--mem {mem}')
@@ -277,4 +272,4 @@ templateGPU=SbatchGeneratorMiniGPU
 
 
 if __name__ == "__main__":
-    print("sbatch.py is a module and is not supposed to be called directly")
+    raise SystemExit("sbatch.py is a module and is not supposed to be called directly")
