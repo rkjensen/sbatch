@@ -1,1 +1,1 @@
-import sbatch as sbatch
+from sbatch.sbatch import *
