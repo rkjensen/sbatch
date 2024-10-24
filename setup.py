@@ -6,5 +6,5 @@ setup(
     packages=["sbatch"],
     include_package_data=True,
     author_email = 'rasmuskjeldsenj@gmail.com',
-    install_requires=[],
-)
+    python_requires = ">=3.6",
+    install_requires=[],)
