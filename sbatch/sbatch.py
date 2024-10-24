@@ -33,7 +33,7 @@ class FileGenerator(object):
 
     write_lines = write_list
 
-    def submit_script(self):
+    def submit_script(self) -> None:
         run(["sbatch", self.filename], check=True)
 
 
@@ -90,7 +90,7 @@ class SbatchGenerator(FileGenerator):
         error = self.check_error(error, array, N)
         return log, error
 
-    def check_error(self, error, array, N):
+    def check_error(self, error, array, N)  -> str:
         if not error and not array and N == 1:
             error = f"slurm-%j-%N.err.txt"
         if not error and not array and N > 1:
@@ -101,7 +101,7 @@ class SbatchGenerator(FileGenerator):
             error = f"slurm-%A_%a.err.txt"
         return error
 
-    def check_log(self, log, array, N):
+    def check_log(self, log, array, N) -> str:
         if not log and not array and N == 1:
             log = f"slurm-%j-%N.out.txt"
         if not log and not array and N > 1:
