@@ -40,6 +40,7 @@ class FileGenerator(object):
 
 
 class SbatchGenerator(FileGenerator):
+
     def __init__(
         self,
         filename: str,
@@ -53,6 +54,22 @@ class SbatchGenerator(FileGenerator):
         array_throttle=None,
         **kwargs,
     ) -> None:
+        """
+        Initializes the SbatchGenerator class with parameters for configuring
+        an sbatch script.
+        
+        Parameters:
+            filename (str): The name of the file to which the sbatch script will be written.
+            time (str): The maximum time for job execution in the format "days-hours:minutes:seconds".
+            tasks (int): The number of tasks to run.
+            cpu (int): The number of CPUs per task.
+            N (int): The number of nodes required.
+            log (str): The log file name. If None, a default name will be used.
+            error (str): The error file name. If None, a default name will be used.
+            array: Specifies the job array index values.
+            array_throttle: Limits the number of simultaneous jobs in the array.
+            **kwargs: Additional sbatch options to be written in the script.
+        """
         super().__init__(filename)
         self.write_header()
         self.write_sbatch(f"--time={time}")
@@ -103,12 +120,6 @@ class SbatchGenerator(FileGenerator):
     def write_header(self) -> None:
         self.write_line("#!/bin/bash", mode="w")
 
-    def submit_script(self, **kwargs) -> None:
-        run(
-            f"sbatch {self.filename}",
-            shell=True,
-            **kwargs,
-        )
 class NewSbatchGenerator(FileGenerator):
     def __init__(
         self,
