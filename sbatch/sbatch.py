@@ -15,7 +15,6 @@ script.submit_script()
 CPU_QUEUE = "htc-el8"
 GPU_QUEUE = "gpu-el8"
 
-
 class FileGenerator(object):
     def __init__(self, filename: str) -> None:
         self.filename = filename
@@ -259,6 +258,13 @@ class SbatchGeneratorMiniGPU(NewSbatchGenerator):
         self.write_sbatch(f'-G 1')
         self.write_sbatch(f'--mem {mem}')
 
+class SbatchGeneratorL401GPU(NewSbatchGenerator):
+    def __init__(self, filename: str, time: str = "1-00:00:00", tasks: int = 32, cpu: int = 1, N: int = 1, log: str = None, error: str = None, array=None, mem_per_gpu: int = 190000, **kwargs):
+        super().__init__(filename,time,tasks,cpu,N,log,error,array,**kwargs)
+        self.write_sbatch(f'--mem-per-gpu={mem_per_gpu}')
+        self.write_sbatch(f'-C genoa,gpu=L40s')
+        self.write_sbatch(f'-p {GPU_QUEUE}')
+        self.write_sbatch(f'-G 1')
 
 
 GPU = SbatchGeneratorGPU
@@ -269,7 +275,7 @@ A40 = SbatchGeneratorA40
 GPU3090 = SbatchGenerator3090
 maxL40=SbatchGeneratormaxL40
 templateGPU=SbatchGeneratorMiniGPU
-
+L40_1GPU=SbatchGeneratorL401GPU
 
 if __name__ == "__main__":
     raise SystemExit("sbatch.py is a module and is not supposed to be called directly")
